@@ -27,7 +27,7 @@ type Block interface {
 	//Key() []byte
 }
 
-type myBlock interface {
+type MyBlock interface {
 	Block
 	Signature() []byte
 	Proof() []byte
@@ -37,8 +37,11 @@ type myBlock interface {
 // A BasicBlock is a singular block of data in ipfs. It implements the Block
 // interface.
 type BasicBlock struct {
-	cid  cid.Cid
-	data []byte
+	cid       cid.Cid
+	data      []byte
+	signature []byte
+	proof     []byte
+	key       []byte
 }
 
 // NewBlock creates a Block object from opaque data. It will hash the data.
@@ -46,6 +49,8 @@ func NewBlock(data []byte) *BasicBlock {
 	// TODO: fix assumptions
 	return &BasicBlock{data: data, cid: cid.NewCidV0(u.Hash(data))}
 }
+
+//func ConvertMyBlockToBlock()
 
 // NewBlockWithCid creates a new block when the hash of the data
 // is already known, this is used to save time in situations where
@@ -91,43 +96,16 @@ func (b *BasicBlock) Loggable() map[string]interface{} {
 	}
 }
 
-type MyBlock struct {
-	cid       cid.Cid
-	data      []byte
-	signature []byte
-	proof     []byte
-	key       []byte
-}
-
-func (b *MyBlock) Multihash() mh.Multihash {
-	return b.cid.Hash()
-}
-
-// RawData returns the block raw contents as a byte slice.
-func (b *MyBlock) RawData() []byte {
-	return b.data
-}
-
-// Cid returns the content identifier of the block.
-func (b *MyBlock) Cid() cid.Cid {
-	return b.cid
-}
-
-// String provides a human-readable representation of the block CID.
-func (b *MyBlock) String() string {
-	return fmt.Sprintf("[Block %s]", b.Cid())
-}
-
-func (b *MyBlock) Signature() []byte {
+func (b *BasicBlock) Signature() []byte {
 	return b.signature
 }
 
 // Implement the Proof method for BasicBlock.
-func (b *MyBlock) Proof() []byte {
+func (b *BasicBlock) Proof() []byte {
 	return b.proof
 }
 
 // Implement the Key method for BasicBlock.
-func (b *MyBlock) Key() []byte {
+func (b *BasicBlock) Key() []byte {
 	return b.key
 }
