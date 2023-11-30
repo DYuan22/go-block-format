@@ -32,6 +32,9 @@ type MyBlock interface {
 	Signature() []byte
 	Proof() []byte
 	Key() []byte
+	SetSignature([]byte)
+	SetProof([]byte)
+	SetKey([]byte)
 }
 
 // A BasicBlock is a singular block of data in ipfs. It implements the Block
@@ -108,4 +111,19 @@ func (b *BasicBlock) Proof() []byte {
 // Implement the Key method for BasicBlock.
 func (b *BasicBlock) Key() []byte {
 	return b.key
+}
+
+// SetSignature sets a new signature for the BasicBlock.
+func (b *BasicBlock) SetSignature(newSignature []byte) {
+	b.signature = newSignature
+}
+
+// SetProof sets a new proof for the BasicBlock.
+func (b *BasicBlock) SetProof(newProof []byte) {
+	b.proof = newProof
+}
+
+// SetKey sets a new key for the BasicBlock.
+func (b *BasicBlock) SetKey(newKey []byte) {
+	b.key = newKey
 }
